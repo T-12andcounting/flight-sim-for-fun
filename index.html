@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flight Simulator</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+
+<body>
+  <div id="app"></div>
+  <script>
+    function showError(msg, source, line, col, error) {
+      const div = document.createElement('div');
+      div.style.position = 'fixed';
+      div.style.top = '0';
+      div.style.left = '0';
+      div.style.width = '100%';
+      div.style.height = '100%';
+      div.style.backgroundColor = 'rgba(100, 0, 0, 0.95)';
+      div.style.color = 'white';
+      div.style.zIndex = '2147483647'; // Max z-index
+      div.style.padding = '20px';
+      div.style.fontFamily = 'monospace';
+      div.style.fontSize = '16px';
+      div.style.whiteSpace = 'pre-wrap';
+      div.style.overflow = 'auto';
+
+      let errorText = `CRITICAL ERROR:\n${msg}`;
+      if (source) errorText += `\n\nSource: ${source}:${line}:${col}`;
+      if (error && error.stack) errorText += `\n\nStack:\n${error.stack}`;
+
+      div.innerText = errorText;
+      document.body.appendChild(div);
+      console.error('CRITICAL ERROR CAUGHT:', msg, error);
+    }
+
+    window.addEventListener('error', function (event) {
+      showError(event.message || 'Unknown Error', event.filename, event.lineno, event.colno, event.error);
+    }, true); // Capture phase to catch resource loading errors
+
+    window.addEventListener('unhandledrejection', function (event) {
+      showError(event.reason ? event.reason.message : 'Unhandled Rejection', '', 0, 0, event.reason);
+    });
+  </script>
+  <script type="module" src="/main.js"></script>
+</body>
+
+</html>
