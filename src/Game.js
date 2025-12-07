@@ -95,6 +95,8 @@ export class Game {
                     <p>Arrows/WASD: Pitch/Roll</p>
                     <p>Q/E: Yaw</p>
                     <p>C: Toggle View</p>
+                    <button id="toggle-view-btn"
+                        style="pointer-events: auto; margin-top: 10px; padding: 8px; background: #9933ff; color: #fff; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">Toggle View (C)</button>
                     <button id="practice-landing-btn"
                         style="pointer-events: auto; margin-top: 10px; padding: 8px; background: #0f0; color: #000; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">Practice Landing</button>
                     <button id="exit-game-btn"
@@ -170,10 +172,17 @@ export class Game {
             }
 
             if (e.key.toLowerCase() === 'c') {
-                this.cameraMode = this.cameraMode === 'third-person' ? 'first-person' : 'third-person';
-                this.cockpitOverlay.classList.toggle('active', this.cameraMode === 'first-person');
+                this.toggleView();
             }
         });
+
+        const toggleViewBtn = document.getElementById('toggle-view-btn');
+        if (toggleViewBtn) {
+            toggleViewBtn.addEventListener('click', () => {
+                toggleViewBtn.blur(); // Remove focus so spacebar doesn't trigger it again
+                this.toggleView();
+            });
+        }
 
         const practiceLandingBtn = document.getElementById('practice-landing-btn');
         if (practiceLandingBtn) {
@@ -399,6 +408,21 @@ export class Game {
         ctx.beginPath();
         ctx.arc(planeX, planeZ, 3, 0, Math.PI * 2);
         ctx.fill();
+    }
+
+    toggleView() {
+        this.cameraMode = this.cameraMode === 'third-person' ? 'first-person' : 'third-person';
+        const isCockpit = this.cameraMode === 'first-person';
+
+        this.cockpitOverlay.classList.toggle('active', isCockpit);
+
+        // Toggle class on main UI container for HUD movement
+        const uiContainer = document.getElementById('ui');
+        if (uiContainer) {
+            uiContainer.classList.toggle('cockpit-mode', isCockpit);
+        }
+
+        // Update button text if needed, or keep it generic "Toggle View"
     }
 
     updateCompass(yaw) {
