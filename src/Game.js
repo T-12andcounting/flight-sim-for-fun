@@ -51,6 +51,7 @@ export class Game {
         this.createStarfield();
         this.createUI();
         this.setupEventListeners();
+        this.processCockpitImage();
         this.audioManager.init();
 
         this.clock = new THREE.Clock();
@@ -122,8 +123,12 @@ export class Game {
 
         // Success message
         this.successMessage = document.createElement('div');
-        this.successMessage.style.cssText = 'position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#00ff00;font-size:48px;font-family:Arial,sans-serif;font-weight:bold;text-shadow:2px 2px 0 #000;display:none;';
-        this.successMessage.innerText = 'SUCCESSFUL LANDING! Way to go Captain Capable!!';
+        this.successMessage.style.cssText = 'position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#00ff00;font-size:48px;font-family:Arial,sans-serif;font-weight:bold;text-shadow:2px 2px 0 #000;display:none;text-align:center;';
+        this.successMessage.innerHTML = `
+            <div>SUCCESSFUL LANDING!</div>
+            <div style="font-size:24px; color:white; margin-top:20px;">Way to go Captain Capable!!</div>
+            <button id="fly-again-btn" style="pointer-events:auto; margin-top:30px; padding:15px 30px; font-size:24px; background:#00ff00; color:black; border:none; border-radius:10px; cursor:pointer; font-weight:bold;">Fly Again</button>
+        `;
         this.container.appendChild(this.successMessage);
 
         // Points message
@@ -208,6 +213,16 @@ export class Game {
             });
         }
 
+        // Use event delegation for dynamic "Fly Again" button
+        this.container.addEventListener('click', (e) => {
+            if (e.target && e.target.id === 'fly-again-btn') {
+                this.audioManager.resume();
+                this.plane.reset();
+                this.successMessage.style.display = 'none';
+                this.hasPlayedApplause = false;
+            }
+        });
+
         window.addEventListener('resize', () => {
             this.camera.aspect = window.innerWidth / window.innerHeight;
             this.camera.updateProjectionMatrix();
@@ -266,22 +281,6 @@ export class Game {
                 this.hasPlayedApplause = true;
 
                 const user = authManager.getUser();
-                if (user) {
-                    scoreManager.saveScore(this.score, user.id);
-                }
-            }
-
-            setTimeout(() => {
-                this.successMessage.style.display = 'none';
-                this.plane.successfulLanding = false;
-                this.plane.wasFlying = false;
-                this.hasPlayedApplause = false;
-            }, 5000);
-        }
-
-        if (this.explosion) {
-            this.explosion.update(dt);
-            if (this.explosion.isFinished) {
                 this.explosion = null;
             }
         }
@@ -410,6 +409,41 @@ export class Game {
         ctx.fill();
     }
 
+    processCockpitImage() {
+        const img = new Image();
+        img.src = '/Green%20screen%20blank%20cockpit.png';
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imageData.data;
+
+            for (let i = 0; i < data.length; i += 4) {
+                const r = data[i];
+                const g = data[i + 1];
+                const b = data[i + 2];
+
+                // Balanced Green Screen detection
+                // 1. Minimum brightness of 90 prevents removing dark dashboard parts (which might be dark grey/slightly greenish)
+                // 2. Ratio of 1.3 ensures it is distinctly green, not just a bright white/grey
+                if (g > 90 && g > r * 1.3 && g > b * 1.3) {
+                    data[i + 3] = 0; // Set Alpha to 0 (Transparent)
+                }
+            }
+
+            ctx.putImageData(imageData, 0, 0);
+
+            // Manual artifact fix: Clear top-left corner (20x20) where the triangle was reported
+            ctx.clearRect(0, 0, 20, 20);
+
+            this.cockpitOverlay.style.backgroundImage = `url(${canvas.toDataURL()})`;
+        };
+    }
+
     toggleView() {
         this.cameraMode = this.cameraMode === 'third-person' ? 'first-person' : 'third-person';
         const isCockpit = this.cameraMode === 'first-person';
@@ -421,8 +455,6 @@ export class Game {
         if (uiContainer) {
             uiContainer.classList.toggle('cockpit-mode', isCockpit);
         }
-
-        // Update button text if needed, or keep it generic "Toggle View"
     }
 
     updateCompass(yaw) {

@@ -113,46 +113,18 @@ p {
   display: none;
   grid-column: 1 / -1;
   grid-row: 1 / -1;
+  z-index: 50;
 }
 
 .cockpit-overlay.active {
   display: block;
-  border: 60px solid rgba(20, 20, 20, 0.9);
-  border-top-width: 80px;
-  border-bottom-width: 100px;
-  box-sizing: border-box;
-}
-
-.cockpit-overlay.active::before {
-  content: '';
-  position: absolute;
-  top: -60px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 600px;
-  height: 40px;
-  background: linear-gradient(to bottom, rgba(50, 50, 50, 0.8), rgba(30, 30, 30, 0.9));
-  border-radius: 0 0 10px 10px;
-}
-
-.cockpit-overlay.active::after {
-  content: '';
-  position: absolute;
-  bottom: -80px;
-  left: 0;
-  width: 100%;
-  height: 60px;
-  background: linear-gradient(to top, rgba(30, 30, 30, 0.95), rgba(50, 50, 50, 0.7));
-  border-top: 2px solid #333;
-}
-
-/* ===== LANDING PAGE STYLES ===== */
-.landing-page {
-  font-family: 'Inter', 'Segoe UI', sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  min-height: 100vh;
-  overflow-y: auto;
-  color: #fff;
+  background-image: url('/cockpit_retro.png');
+  /* Fallback */
+  background-size: 100% 100%;
+  pointer-events: none;
+  /* Mask removed to allow new image to define the window shape */
+  -webkit-mask-image: none;
+  mask-image: none;
 }
 
 .hero {
@@ -354,6 +326,7 @@ p {
   border-radius: 8px;
   background: rgba(255, 0, 0, 0.1);
   font-size: 0.9em;
+  display: none;
 }
 
 .auth-footer {
@@ -473,6 +446,203 @@ p {
 
 .btn-block {
   width: 100%;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* ===== LEADERBOARD STYLES ===== */
+.leaderboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.leaderboard-table th,
+.leaderboard-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.leaderboard-table th {
+  background: rgba(102, 126, 234, 0.2);
+  font-weight: 600;
+  color: #4a5568;
+}
+
+.leaderboard-table tr:last-child td {
+  border-bottom: none;
+}
+
+.leaderboard-table tr:hover {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.highlight-row {
+  background: rgba(102, 126, 234, 0.15) !important;
+  font-weight: bold;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  color: #333;
+  font-weight: 500;
+}
+
+.form-group input {
+  padding: 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 1em;
+  transition: border-color 0.3s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.error-message {
+  padding: 10px;
+  border-radius: 8px;
+  background: rgba(255, 0, 0, 0.1);
+  font-size: 0.9em;
+  display: none;
+}
+
+.auth-footer {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  color: #667eea;
+  cursor: pointer;
+  font-size: 0.9em;
+  text-decoration: underline;
+  padding: 0;
+}
+
+/* ===== DASHBOARD PAGE STYLES ===== */
+.dashboard-page {
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding: 40px 20px;
+  overflow-y: auto;
+}
+
+.dashboard-container {
+  max-width: 800px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.dashboard-container h1 {
+  color: #667eea;
+  margin-bottom: 30px;
+  font-size: 2em;
+}
+
+.user-info {
+  background: rgba(102, 126, 234, 0.1);
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 30px;
+}
+
+.user-id {
+  font-size: 0.8em;
+  color: #666;
+  margin-top: 10px;
+}
+
+.dashboard-actions {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.dashboard-features {
+  background: rgba(102, 126, 234, 0.05);
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.dashboard-features ul {
+  list-style: none;
+  padding: 0;
+}
+
+.dashboard-features li {
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-features li:last-child {
+  border-bottom: none;
+}
+
+/* ===== BUTTON STYLES ===== */
+.btn {
+  padding: 14px 32px;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  pointer-events: auto !important;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.btn-large {
+  font-size: 1.3em;
+  padding: 18px 48px;
+}
+
+.btn-block {
+  width: 100%;
+  padding-left: 0;
+  padding-right: 0;
 }
 
 /* ===== LEADERBOARD STYLES ===== */
@@ -513,47 +683,308 @@ p {
 
 .highlight-row td {
   color: #5a67d8;
-}/ *   = = = = =   C O C K P I T   D A S H B O A R D   M O D E   = = = = =   * /  
- . c o c k p i t - m o d e   . h u d - p a n e l   {  
-         g r i d - c o l u m n :   2 ;  
-         g r i d - r o w :   2 ;  
-         a l i g n - s e l f :   e n d ;  
-         j u s t i f y - s e l f :   c e n t e r ;  
-         b a c k g r o u n d :   r g b a ( 2 0 ,   2 0 ,   2 0 ,   0 . 9 5 ) ;  
-         b o r d e r :   4 p x   s o l i d   # 3 3 3 ;  
-         b o r d e r - t o p :   4 p x   s o l i d   # 5 5 5 ;  
-         b o r d e r - r a d i u s :   1 5 p x   1 5 p x   0   0 ;  
-         d i s p l a y :   f l e x ;  
-         g a p :   2 0 p x ;  
-         p a d d i n g :   1 5 p x   3 0 p x ;  
-         m a r g i n - b o t t o m :   - 2 0 p x ;  
-         / *   S l i g h t   o v e r l a p   w i t h   b o t t o m   e d g e   * /  
-         b o x - s h a d o w :   0   - 5 p x   1 5 p x   r g b a ( 0 ,   0 ,   0 ,   0 . 5 ) ;  
-         z - i n d e x :   1 0 0 ;  
-         c o l o r :   # 0 0 f f 0 0 ;  
-         t e x t - s h a d o w :   0   0   5 p x   # 0 0 f f 0 0 ;  
- }  
-  
- . c o c k p i t - m o d e   . h u d - p a n e l   h 1   {  
-         d i s p l a y :   n o n e ;  
-         / *   H i d e   t i t l e   i n   c o c k p i t   m o d e   f o r   c o m p a c t n e s s   * /  
- }  
-  
- . c o c k p i t - m o d e   . h u d - p a n e l   p   {  
-         d i s p l a y :   f l e x ;  
-         f l e x - d i r e c t i o n :   c o l u m n ;  
-         a l i g n - i t e m s :   c e n t e r ;  
-         f o n t - s i z e :   0 . 8 e m ;  
-         b o r d e r :   1 p x   s o l i d   # 4 4 4 ;  
-         p a d d i n g :   5 p x   1 0 p x ;  
-         b a c k g r o u n d :   # 0 0 0 ;  
-         b o r d e r - r a d i u s :   5 p x ;  
-         m i n - w i d t h :   6 0 p x ;  
- }  
-  
- . c o c k p i t - m o d e   . h u d - p a n e l   s p a n   {  
-         f o n t - s i z e :   1 . 4 e m ;  
-         f o n t - w e i g h t :   b o l d ;  
-         m a r g i n - t o p :   2 p x ;  
- }  
- 
+}
+
+/* ===== COCKPIT DASHBOARD MODE ===== */
+
+/* ===== COCKPIT DASHBOARD MODE ===== */
+.cockpit-overlay.active {
+  display: block;
+  background-size: 100% 100%;
+  pointer-events: none;
+  /* Mask removed - handled by JS Chroma Key */
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+/* Move Navigation (Compass/Minimap) to Dashboard Center */
+.cockpit-mode .navigation-panel {
+  grid-column: 2;
+  grid-row: 2;
+  align-self: end;
+  justify-self: center;
+
+  /* Style specifically for dashboard embedding */
+  background: rgba(0, 0, 0, 0.5);
+  /* Semi-transparent black to sit on dashboard */
+  border: 1px solid #333;
+  margin-bottom: 20px;
+  /* Adjust based on dashboard image height */
+  flex-direction: row;
+  /* Horizontal layout for dashboard */
+  z-index: 100;
+  /* Above the overlay image */
+}
+
+/* Keep Controls visible in top-left */
+.cockpit-mode .controls-panel {
+  grid-column: 1;
+  grid-row: 1;
+  /* Move to top row to avoid being covered by dashboard */
+  align-self: start;
+  z-index: 101;
+  /* Ensure on top */
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* Hide the old HUD panel in cockpit mode (optional, or move it) 
+   The user didn't explicitly ask to hide it, but the new design might replace it.
+   For now, we'll keep it but ensure it doesn't conflict. 
+*/
+.cockpit-mode .hud-panel {
+  /* If we want to keep the digital gauges we made earlier, we can keep this class as is */
+  grid-column: 1 / -1;
+  /* Reset grid */
+  grid-row: 2;
+  align-self: end;
+  justify-self: center;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+
+  /* Transparent background to blend with image dashboard */
+  background: transparent;
+  border: none;
+  box-shadow: none;
+
+  padding: 10px 40px;
+  margin-bottom: 80px;
+  /* Push up above the navigation panel if needed */
+  z-index: 100;
+}
+
+.cockpit-mode .hud-panel p {
+  background: rgba(0, 20, 0, 0.8);
+  /* Dark digital background */
+  border: 2px solid #555;
+  border-radius: 8px;
+  /* Rectangular digital gauges */
+  width: 90px;
+  height: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
+  color: #00ff00;
+  /* Bright green digital text */
+  margin: 0;
+}
+
+.cockpit-mode .hud-panel span {
+  padding: 0;
+}
+
+/* Create a gap in the middle of the HUD items (between AGL and Pitch) 
+   to make room for the centered compass.
+   Using nth-of-type(3) correctly targets the 3rd <p> (AGL), ignoring the <h1>. */
+.cockpit-mode .hud-panel p:nth-of-type(3) {
+  margin-right: 320px;
+  /* Large gap for the compass/minimap console */
+}
+
+/* Nudge compass slightly left as requested */
+.cockpit-mode .navigation-panel {
+  transform: translateX(-50px);
+}
+
+/* ===== DASHBOARD PAGE STYLES ===== */
+.dashboard-page {
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding: 40px 20px;
+  overflow-y: auto;
+}
+
+.dashboard-container {
+  max-width: 800px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.dashboard-container h1 {
+  color: #667eea;
+  margin-bottom: 30px;
+  font-size: 2em;
+}
+
+.user-info {
+  background: rgba(102, 126, 234, 0.1);
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 30px;
+}
+
+.user-id {
+  font-size: 0.8em;
+  color: #666;
+  margin-top: 10px;
+}
+
+.dashboard-actions {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.dashboard-features {
+  background: rgba(102, 126, 234, 0.05);
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.dashboard-features ul {
+  list-style: none;
+  padding: 0;
+}
+
+.dashboard-features li {
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-features li:last-child {
+  border-bottom: none;
+}
+
+/* ===== BUTTON STYLES ===== */
+.btn {
+  padding: 14px 32px;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  pointer-events: auto !important;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.btn-large {
+  font-size: 1.3em;
+  padding: 18px 48px;
+}
+
+.btn-block {
+  width: 100%;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* ===== LEADERBOARD STYLES ===== */
+.leaderboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.leaderboard-table th,
+.leaderboard-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.leaderboard-table th {
+  background: rgba(102, 126, 234, 0.2);
+  font-weight: 600;
+  color: #4a5568;
+}
+
+.leaderboard-table tr:last-child td {
+  border-bottom: none;
+}
+
+.leaderboard-table tr:hover {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.highlight-row {
+  background: rgba(102, 126, 234, 0.15) !important;
+  font-weight: bold;
+}
+
+.highlight-row td {
+  color: #5a67d8;
+}
+
+/* ===== COCKPIT DASHBOARD MODE ===== */
+.cockpit-overlay.active {
+  display: block;
+  background-size: 100% 100%;
+  pointer-events: none;
+  /* Mask removed - handled by JS Chroma Key */
+}
+
+.cockpit-mode .hud-panel {
+  grid-column: 2;
+  grid-row: 2;
+  align-self: end;
+  justify-self: center;
+
+  /* Transparent background to blend with image dashboard */
+  background: transparent;
+  border: none;
+  box-shadow: none;
+
+  display: flex;
+  gap: 30px;
+  padding: 10px 40px;
+  margin-bottom: 30px;
+  /* Lift up slightly to sit on the visual dashboard */
+  z-index: 100;
+}
+
+.cockpit-mode .hud-panel p {
+  background: rgba(0, 20, 0, 0.8);
+  /* Dark digital background */
+  border: 2px solid #555;
+  border-radius: 8px;
+  /* Rectangular digital gauges */
+  width: 90px;
+  height: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
+  color: #00ff00;
+  /* Bright green digital text */
+  margin: 0;
+}
+
+.cockpit-mode .hud-panel span {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1.4em;
+  font-weight: bold;
+}
+
+.cockpit-mode .hud-panel h1 {
+  display: none;
+}

@@ -96,10 +96,12 @@ export class Plane {
         // Factor 2.0 provides realistic terminal velocity (~200mph)
         this.speed -= physicsForward.y * this.gravity * 2.0 * dt;
 
-        if (controls.keys.z) {
-            this.speed += this.acceleration * dt;
-        } else if (controls.keys.x || controls.keys[" "]) {
-            this.speed -= this.acceleration * dt;
+        const input = controls.getState();
+
+        if (input.throttle > 0) {
+            this.speed += this.acceleration * dt * input.throttle;
+        } else if (input.brake > 0) {
+            this.speed -= this.acceleration * dt * input.brake;
         } else {
             this.speed -= (this.speed * 0.1) * dt;
         }
@@ -111,15 +113,32 @@ export class Plane {
         // This prevents stall warning on the runway before takeoff
         this.isStalled = this.speed < stallSpeed && this.wasFlying;
 
-        const pitchInput = (controls.keys.ArrowDown ? 1 : 0) - (controls.keys.ArrowUp ? 1 : 0);
-        const rollInput = (controls.keys.ArrowLeft ? 1 : 0) - (controls.keys.ArrowRight ? 1 : 0);
-        const yawInput = (controls.keys.q ? 1 : 0) - (controls.keys.e ? 1 : 0);
+        const pitchInput = input.pitch;
+        const rollInput = input.roll;
+        const yawInput = input.yaw;
 
-        // Apply stall effects
         let pitchDelta = pitchInput * this.pitchSpeed * dt;
         let rollDelta = rollInput * this.rollSpeed * dt;
         let yawDelta = yawInput * this.yawSpeed * dt;
-        if (this.isStalled) {
+
+        // SKIP aerodynamic/stall forces if we have successfully landed
+        if (this.successfulLanding) {
+            this.isStalled = false;
+            // Apply strong braking on the ground
+            this.speed -= this.deceleration * 2 * dt;
+            if (this.speed < 0) this.speed = 0;
+
+            // Allow minor steering on ground if moving
+            if (this.speed > 1) {
+                yawDelta = yawInput * this.yawSpeed * dt;
+            } else {
+                yawDelta = 0;
+            }
+            pitchDelta = 0;
+            rollDelta = 0;
+        }
+        else if (this.isStalled) {
+            // ... existing stall logic ...
             // Reduce control effectiveness during stall
             const terrainHeight = this.getTerrainHeight(this.position.x, this.position.z);
             const agl = this.position.y - terrainHeight;
